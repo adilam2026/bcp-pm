@@ -5,9 +5,9 @@ import { WebView } from 'react-native-webview';
 export default function App() {
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar hidden={true} />
       <WebView
-        source={{ uri: 'https://claude.ai/public/artifacts/243af8eb-e67c-40c2-9fbd-1402d0e2a5c9' }}
+        source={{ uri: 'https://bcp-web-production.up.railway.app' }}
         style={styles.webview}
         javaScriptEnabled={true}
         domStorageEnabled={true}
