@@ -7,19 +7,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Setup Expo
-        uses: expo/expo-github-action@v8
+
+      - uses: actions/setup-java@v4
         with:
-          expo-version: latest
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-          packager: npm
+          distribution: temurin
+          java-version: 17
+
       - name: Install dependencies
         run: npm install
+
+      - name: Install Expo CLI
+        run: npm install -g expo-cli
+
+      - name: Prebuild
+        run: npx expo prebuild --platform android --no-install
+
       - name: Build APK
         run: |
-          export EAS_SKIP_AUTO_FINGERPRINT=1
-          eas build --platform android --profile preview --non-interactive
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: bcp-pm.apk
+          path: android/app/build/outputs/apk/release/*.apk
